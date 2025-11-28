@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 
-interface NicknameGameProps {
+interface MadnessArcadeProps {
   onBack: () => void;
 }
 
@@ -13,7 +13,11 @@ const NICKNAMES = [
   { name: 'Morning Sunshine', message: "Every morning with you feels like a new beginning. ☀️" }
 ];
 
-function MadnessArcade({ onBack }: NicknameGameProps) {
+const GAMES = [
+  { id: 'nicknames', title: 'What Should I Call You Today?', emoji: '💭', description: 'Spin the wheel and lock in a nickname!' }
+];
+
+function NicknameGame({ onBack }: { onBack: () => void }) {
   const [currentNicknameIndex, setCurrentNicknameIndex] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const [selectedNickname, setSelectedNickname] = useState<typeof NICKNAMES[0] | null>(null);
@@ -51,9 +55,9 @@ function MadnessArcade({ onBack }: NicknameGameProps) {
       <div className="container mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-screen">
         <div className="text-center mb-12">
           <h1 className="text-5xl md:text-6xl font-bold text-rose-700 mb-2 font-fredoka">
-            The Madness Arcade 🎮
+            What Should I Call You Today? 💭
           </h1>
-          <p className="text-xl text-rose-600">What should I call you today?</p>
+          <p className="text-xl text-rose-600">Spin the wheel and discover your nickname for today!</p>
         </div>
 
         <div className="max-w-2xl w-full">
@@ -114,7 +118,7 @@ function MadnessArcade({ onBack }: NicknameGameProps) {
             {NICKNAMES.map((nickname, idx) => (
               <div
                 key={idx}
-                className="bg-white/60 rounded-2xl p-4 border-2 border-rose-200 text-center"
+                className="bg-white/60 rounded-2xl p-4 border-2 border-rose-200 text-center hover:bg-white/80 transition-all"
               >
                 <p className="font-bold text-rose-700 font-fredoka text-lg">{nickname.name}</p>
               </div>
@@ -132,6 +136,54 @@ function MadnessArcade({ onBack }: NicknameGameProps) {
           animation: fade-in 0.5s ease-out;
         }
       `}</style>
+    </div>
+  );
+}
+
+function MadnessArcade({ onBack }: MadnessArcadeProps) {
+  const [selectedGame, setSelectedGame] = useState<string | null>(null);
+
+  if (selectedGame === 'nicknames') {
+    return <NicknameGame onBack={() => setSelectedGame(null)} />;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-purple-100 font-quicksand">
+      <button
+        onClick={onBack}
+        className="fixed top-6 left-6 z-50 bg-white/80 backdrop-blur-sm rounded-full p-3 hover:bg-white transition-all shadow-lg border-2 border-rose-300"
+      >
+        <ArrowLeft className="text-rose-900" size={24} />
+      </button>
+
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-bold text-rose-700 mb-2 font-fredoka">
+            The Madness Arcade 🎮
+          </h1>
+          <p className="text-xl text-rose-600">Pick a game to play together!</p>
+        </div>
+
+        <div className="max-w-2xl mx-auto grid grid-cols-1 gap-6">
+          {GAMES.map((game) => (
+            <button
+              key={game.id}
+              onClick={() => setSelectedGame(game.id)}
+              className="bg-gradient-to-r from-pink-200 to-rose-200 hover:from-pink-300 hover:to-rose-300 rounded-3xl p-8 shadow-lg border-4 border-white transition-all hover:shadow-2xl hover:scale-105 group"
+            >
+              <div className="text-center">
+                <div className="text-6xl mb-4 group-hover:animate-bounce">{game.emoji}</div>
+                <h3 className="text-3xl font-bold text-rose-900 mb-2 font-fredoka">{game.title}</h3>
+                <p className="text-lg text-rose-700 font-quicksand">{game.description}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center max-w-2xl mx-auto">
+          <p className="text-rose-600 font-quicksand">More games coming soon! 💕</p>
+        </div>
+      </div>
     </div>
   );
 }

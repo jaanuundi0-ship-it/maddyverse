@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Heart, Sun, Gamepad2, BookOpen } from 'lucide-react';
+import { Heart, Sun, Gamepad2, BookOpen, FileText } from 'lucide-react';
 
 const Doodles = () => (
   <>
@@ -13,11 +13,22 @@ const Doodles = () => (
     <div className="absolute top-1/4 left-1/3 text-6xl animate-spin-slow opacity-20">☀️</div>
     <div className="absolute bottom-1/3 right-1/4 text-5xl animate-float" style={{ animationDelay: '1.2s' }}>🌷</div>
     <div className="absolute top-2/3 right-1/3 text-4xl animate-wobble" style={{ animationDelay: '1.8s' }}>✨</div>
+    <div className="absolute top-20 left-1/4 text-5xl animate-float" style={{ animationDelay: '0.3s' }}>😂</div>
+    <div className="absolute bottom-1/4 left-1/3 text-5xl animate-wobble" style={{ animationDelay: '1.5s' }}>😭</div>
+    <div className="absolute top-1/3 left-10 text-4xl animate-float" style={{ animationDelay: '2.2s' }}>💋</div>
+    <div className="absolute bottom-10 left-1/2 text-5xl animate-wobble" style={{ animationDelay: '0.7s' }}>🥺</div>
+    <div className="absolute top-2/3 left-1/4 text-4xl animate-float" style={{ animationDelay: '1.8s' }}>😳</div>
+    <div className="absolute bottom-1/3 right-1/3 text-5xl animate-wobble" style={{ animationDelay: '2.5s' }}>😩</div>
+    <div className="absolute top-1/2 right-20 text-6xl animate-float" style={{ animationDelay: '1.1s' }}>🦋</div>
+    <div className="absolute top-1/4 right-1/3 text-5xl animate-wobble" style={{ animationDelay: '0.4s' }}>🕷️</div>
+    <div className="absolute bottom-20 left-1/4 text-6xl animate-float" style={{ animationDelay: '2.8s' }}>❤️</div>
+    <div className="absolute top-3/4 right-10 text-4xl animate-wobble" style={{ animationDelay: '1.3s' }}>😂</div>
+    <div className="absolute bottom-1/2 right-1/4 text-5xl animate-float" style={{ animationDelay: '2.1s' }}>💋</div>
   </>
 );
 
 interface HomeProps {
-  onNavigate: (page: 'journal' | 'arcade' | 'logbook') => void;
+  onNavigate: (page: 'journal' | 'arcade' | 'logbook' | 'poems' | 'paras') => void;
 }
 
 function Home({ onNavigate }: HomeProps) {
@@ -68,19 +79,22 @@ function Home({ onNavigate }: HomeProps) {
       icon: Sun,
       title: "Sunshine Journal",
       onClick: () => onNavigate('journal'),
-      color: 'from-yellow-200 to-orange-200'
+      color: 'from-yellow-200 to-orange-200',
+      emoji: '☀️'
     },
     {
       icon: Gamepad2,
       title: "Madness Arcade",
       onClick: () => onNavigate('arcade'),
-      color: 'from-pink-200 to-rose-200'
+      color: 'from-pink-200 to-rose-200',
+      emoji: '🎮'
     },
     {
       icon: BookOpen,
       title: "Lifephile Logbook",
       onClick: () => onNavigate('logbook'),
-      color: 'from-blue-200 to-purple-200'
+      color: 'from-green-200 to-teal-200',
+      emoji: '📖'
     }
   ];
 
@@ -156,12 +170,27 @@ function Home({ onNavigate }: HomeProps) {
             )}
           </div>
 
-          <div className="mt-12 bg-white/60 backdrop-blur-sm rounded-3xl p-8 border-4 border-amber-300 shadow-lg">
-            <p className="text-center text-lg text-stone-700 leading-relaxed font-quicksand">
-              <span className="font-bold text-rose-700 font-fredoka">My Core Variables:</span> Maddy (Madly cute, my madness), Little Angel, Morning Sunshine, Lifephile.
-              <br />
-              <span className="italic text-rose-600 font-fredoka">You are my stability and my color. 🎨</span>
-            </p>
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <button
+              onClick={() => onNavigate('poems')}
+              className="bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 rounded-3xl p-8 border-4 border-white shadow-lg transition-all hover:shadow-2xl hover:scale-105"
+            >
+              <div className="flex flex-col items-center gap-3">
+                <FileText className="text-purple-700" size={48} />
+                <h3 className="text-2xl font-bold text-purple-900 font-fredoka">Poems 💜</h3>
+                <p className="text-sm text-purple-700 font-quicksand">Words from my heart</p>
+              </div>
+            </button>
+            <button
+              onClick={() => onNavigate('paras')}
+              className="bg-gradient-to-r from-blue-200 to-cyan-200 hover:from-blue-300 hover:to-cyan-300 rounded-3xl p-8 border-4 border-white shadow-lg transition-all hover:shadow-2xl hover:scale-105"
+            >
+              <div className="flex flex-col items-center gap-3">
+                <FileText className="text-blue-700" size={48} />
+                <h3 className="text-2xl font-bold text-blue-900 font-fredoka">Paragraphs 💙</h3>
+                <p className="text-sm text-blue-700 font-quicksand">Thoughts & feelings</p>
+              </div>
+            </button>
           </div>
         </div>
 
@@ -177,10 +206,13 @@ function Home({ onNavigate }: HomeProps) {
                 <div
                   key={index}
                   onClick={item.onClick}
-                  className={`bg-gradient-to-br ${item.color} rounded-3xl p-8 cursor-pointer hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-white shadow-lg group relative`}
+                  className={`bg-gradient-to-br ${item.color} rounded-3xl p-8 cursor-pointer hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-white shadow-lg group relative overflow-hidden`}
                 >
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="bg-white/70 p-6 rounded-full group-hover:animate-bounce transform transition-transform">
+                  <div className="absolute inset-0 opacity-10 text-8xl flex items-center justify-center font-fredoka pointer-events-none group-hover:animate-float">
+                    {item.emoji}
+                  </div>
+                  <div className="relative z-10 flex flex-col items-center gap-4">
+                    <div className="bg-white/80 p-6 rounded-full group-hover:animate-bounce transform transition-transform shadow-md">
                       <Icon className="text-amber-900" size={48} />
                     </div>
                     <h3 className="text-2xl font-bold text-amber-900 text-center font-fredoka">{item.title}</h3>
@@ -199,6 +231,9 @@ function Home({ onNavigate }: HomeProps) {
         }
         .animate-fade-in {
           animation: fade-in 0.5s ease-out;
+        }
+        .hover\:scale-102:hover {
+          transform: scale(1.02);
         }
       `}</style>
     </div>

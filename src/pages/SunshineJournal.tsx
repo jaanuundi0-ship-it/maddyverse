@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { ArrowLeft, Heart } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowLeft, Heart, Plus } from 'lucide-react';
 
 interface JournalEntry {
   id: string;
@@ -23,6 +23,7 @@ function SunshineJournal({ onBack }: SunshineJournalProps) {
   ]);
   const [newEntry, setNewEntry] = useState({ title: '', content: '' });
   const [selectedEntry, setSelectedEntry] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
   const addEntry = () => {
     if (newEntry.title.trim() && newEntry.content.trim()) {
@@ -34,6 +35,7 @@ function SunshineJournal({ onBack }: SunshineJournalProps) {
       };
       setEntries([entry, ...entries]);
       setNewEntry({ title: '', content: '' });
+      setShowForm(false);
     }
   };
 
@@ -55,29 +57,47 @@ function SunshineJournal({ onBack }: SunshineJournalProps) {
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-4 border-yellow-300 p-8 mb-8">
-            <h2 className="text-2xl font-bold text-amber-900 mb-6 font-fredoka">Add a New Memory ✨</h2>
-            <input
-              type="text"
-              placeholder="Memory title..."
-              value={newEntry.title}
-              onChange={(e) => setNewEntry({ ...newEntry, title: e.target.value })}
-              className="w-full px-4 py-3 mb-4 border-2 border-yellow-200 rounded-2xl focus:outline-none focus:border-yellow-400 bg-yellow-50"
-            />
-            <textarea
-              placeholder="Tell our story..."
-              value={newEntry.content}
-              onChange={(e) => setNewEntry({ ...newEntry, content: e.target.value })}
-              rows={4}
-              className="w-full px-4 py-3 mb-4 border-2 border-yellow-200 rounded-2xl focus:outline-none focus:border-yellow-400 bg-yellow-50 resize-none"
-            />
+          {!showForm ? (
             <button
-              onClick={addEntry}
-              className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white font-bold py-3 px-6 rounded-full transition-all shadow-lg font-fredoka text-lg"
+              onClick={() => setShowForm(true)}
+              className="w-full bg-gradient-to-r from-yellow-300 to-orange-300 hover:from-yellow-400 hover:to-orange-400 rounded-3xl p-6 shadow-lg border-4 border-white transition-all hover:shadow-2xl hover:scale-102 flex items-center justify-center gap-3 mb-8"
             >
-              Save This Memory 💝
+              <Plus className="text-amber-900" size={32} />
+              <span className="text-2xl font-bold text-amber-900 font-fredoka">Create a Memory</span>
             </button>
-          </div>
+          ) : (
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-4 border-yellow-300 p-8 mb-8">
+              <h2 className="text-2xl font-bold text-amber-900 mb-6 font-fredoka">Add a New Memory ✨</h2>
+              <input
+                type="text"
+                placeholder="Memory title..."
+                value={newEntry.title}
+                onChange={(e) => setNewEntry({ ...newEntry, title: e.target.value })}
+                className="w-full px-4 py-3 mb-4 border-2 border-yellow-200 rounded-2xl focus:outline-none focus:border-yellow-400 bg-yellow-50"
+              />
+              <textarea
+                placeholder="Tell our story..."
+                value={newEntry.content}
+                onChange={(e) => setNewEntry({ ...newEntry, content: e.target.value })}
+                rows={4}
+                className="w-full px-4 py-3 mb-4 border-2 border-yellow-200 rounded-2xl focus:outline-none focus:border-yellow-400 bg-yellow-50 resize-none"
+              />
+              <div className="flex gap-3">
+                <button
+                  onClick={addEntry}
+                  className="flex-1 bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white font-bold py-3 px-6 rounded-full transition-all shadow-lg font-fredoka text-lg"
+                >
+                  Save This Memory 💝
+                </button>
+                <button
+                  onClick={() => setShowForm(false)}
+                  className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-6 rounded-full transition-all shadow-lg font-fredoka"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
 
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-amber-900 mb-6 font-fredoka">Our Memories</h2>
@@ -85,18 +105,18 @@ function SunshineJournal({ onBack }: SunshineJournalProps) {
               <div
                 key={entry.id}
                 onClick={() => setSelectedEntry(selectedEntry === entry.id ? null : entry.id)}
-                className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border-4 border-yellow-200 p-8 cursor-pointer hover:shadow-xl transition-all hover:scale-102"
+                className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border-4 border-yellow-200 p-8 cursor-pointer hover:shadow-xl transition-all hover:scale-102 group"
               >
                 <div className="flex items-start gap-4">
-                  <Heart className="text-orange-400 fill-orange-400 mt-2 flex-shrink-0" size={28} />
-                  <div className="flex-1">
+                  <Heart className="text-orange-400 fill-orange-400 mt-2 flex-shrink-0 group-hover:scale-110 transition-transform" size={28} />
+                  <div className="flex-1 min-w-0">
                     <h3 className="text-2xl font-bold text-amber-900 mb-2 font-fredoka">{entry.title}</h3>
                     <p className="text-sm text-gray-500 mb-3">{new Date(entry.date).toLocaleDateString()}</p>
                     {selectedEntry === entry.id && (
-                      <p className="text-amber-800 leading-relaxed text-lg">{entry.content}</p>
+                      <p className="text-amber-800 leading-relaxed text-lg whitespace-pre-wrap">{entry.content}</p>
                     )}
                     {selectedEntry !== entry.id && (
-                      <p className="text-amber-700 line-clamp-2">{entry.content}</p>
+                      <p className="text-amber-700 line-clamp-3">{entry.content}</p>
                     )}
                   </div>
                 </div>
